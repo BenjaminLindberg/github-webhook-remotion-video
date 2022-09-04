@@ -1,6 +1,7 @@
 import path from 'path';
 import {bundle} from '@remotion/bundler';
 import {getCompositions, renderMedia} from '@remotion/renderer';
+import {v4 as uuid} from 'uuid';
 
 const start = async (props: any) => {
 	// The composition you want to render
@@ -32,7 +33,8 @@ const start = async (props: any) => {
   Review "${entry}" for the correct ID.`);
 	}
 
-	const outputLocation = `out/output.mp4`;
+	let id = uuid();
+	const outputLocation = `out/${id}.mp4`;
 	console.log('Attempting to render:', outputLocation);
 	await renderMedia({
 		composition,
@@ -42,6 +44,7 @@ const start = async (props: any) => {
 		inputProps: props,
 	});
 	console.log('Render done!');
+	return id;
 };
 
 export default start;
