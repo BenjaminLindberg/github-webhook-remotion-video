@@ -7,6 +7,7 @@ import {
 	interpolate,
 	useCurrentFrame,
 } from 'remotion';
+import './styles/global.css';
 
 export const MyComposition: React.FC<{
 	repository: string;
@@ -16,9 +17,22 @@ export const MyComposition: React.FC<{
 	commitIds: string[];
 }> = ({repository, repoLogo, messages, authorUsernames, commitIds}) => {
 	const {width, height, fps, durationInFrames} = useVideoConfig();
-
 	const frame = useCurrentFrame();
 
+	const logoTop = interpolate(frame, [0, 12], [50, 0], {
+		extrapolateRight: 'clamp',
+	});
+	const size = spring({
+		frame,
+		fps,
+		durationInFrames: 40,
+		from: 0,
+		to: 1,
+		config: {
+			damping: 5,
+			mass: 0.2,
+		},
+	});
 	return (
 		<>
 			<AbsoluteFill
@@ -46,6 +60,8 @@ export const MyComposition: React.FC<{
 							flexDirection: 'column',
 							justifyContent: 'center',
 							alignItems: 'center',
+							marginTop: `${logoTop}%`,
+							transform: `scale(${size})`,
 						}}
 					>
 						<h1
@@ -59,28 +75,51 @@ export const MyComposition: React.FC<{
 					</AbsoluteFill>
 				</Sequence>
 				{messages.map((item, index) => {
+					const scale = interpolate(
+						frame,
+						[fps * (4 + index * 2) + 10, fps * (4 + index * 2) + 30],
+						[0.2, 1.2],
+						{
+							extrapolateRight: 'clamp',
+						}
+					);
+					const top = interpolate(
+						frame,
+						[fps * (4 + index * 2) + 10, fps * (4 + index * 2) + 20],
+						[-50, 0],
+						{
+							extrapolateRight: 'clamp',
+						}
+					);
 					return (
 						<Sequence
 							from={fps * (4 + index * 2) + 10}
 							durationInFrames={fps * 2 - 10}
+							style={{
+								height: '100%',
+								width: '100%',
+							}}
 						>
 							<h1
 								style={{
 									margin: '1em',
 								}}
 							>
-								Commit {index + 1}
+								{commitIds[index]}
 							</h1>
 							<AbsoluteFill
 								style={{
 									display: 'flex',
 									flexDirection: 'column',
+
 									alignItems: 'center',
+									justifyContent: 'center',
+									transform: `scale(${scale})`,
+									marginTop: `${top}%`,
 								}}
 							>
-								<h1 style={{}}>{authorUsernames[index]}</h1>
-								<h1>{item}</h1>
-								<h1>{commitIds[index]}</h1>
+								<h1 style={{}}>🙂 {authorUsernames[index]}</h1>
+								<h1>✍️ {item}</h1>
 							</AbsoluteFill>
 						</Sequence>
 					);
