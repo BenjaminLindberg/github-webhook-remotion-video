@@ -13,10 +13,9 @@ Then create a Github Webhook.
 Point the webhook to a http tunnel (you can use [ngrok](https://ngrok.com)), or if you're in production simply point it to your domain.
 
 ### Example:
-
 The videos currently looks like this 😆
 
-### <video src="example/Composition.mp4" width="300px" controls/>
+https://user-images.githubusercontent.com/95551073/188318369-967baf93-3732-4282-9905-5574d3c76be8.mp4
 
 Im going to focus more on the remotion side soon
 
