@@ -15,7 +15,19 @@ export const MyComposition: React.FC<{
 	messages: string[];
 	authorUsernames: string[];
 	commitIds: string[];
-}> = ({repository, repoLogo, messages, authorUsernames, commitIds}) => {
+	addedFiles: Array<Array<string>>;
+	deletedFiles: Array<Array<string>>;
+	modifiedFiles: Array<Array<string>>;
+}> = ({
+	repository,
+	repoLogo,
+	messages,
+	authorUsernames,
+	commitIds,
+	addedFiles,
+	modifiedFiles,
+	deletedFiles,
+}) => {
 	const {width, height, fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
@@ -86,7 +98,7 @@ export const MyComposition: React.FC<{
 					const top = interpolate(
 						frame,
 						[fps * (4 + index * 2) + 10, fps * (4 + index * 2) + 20],
-						[-50, 0],
+						[-50, -8],
 						{
 							extrapolateRight: 'clamp',
 						}
@@ -118,8 +130,95 @@ export const MyComposition: React.FC<{
 									marginTop: `${top}%`,
 								}}
 							>
-								<h1 style={{}}>🙂 {authorUsernames[index]}</h1>
+								<h1>🙂 {authorUsernames[index]}</h1>
 								<h1>✍️ {item}</h1>
+
+								<div
+									style={{
+										width: '70%',
+										height: '5px',
+										background: 'royalblue',
+									}}
+								/>
+
+								<div
+									style={{
+										display: 'flex',
+										alignItems: 'center',
+										justifyContent: 'space-evenly',
+										width: '80%',
+										height: 'auto',
+										flexDirection: 'row',
+										boxShadow: 'gray 0px 2px 8px 0px',
+										marginTop: '3em',
+									}}
+								>
+									{addedFiles[index].length ? (
+										<h1
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+											}}
+										>
+											{addedFiles[index].map((item: string) => {
+												return (
+													<span
+														style={{
+															color: 'lime',
+															textShadow: '1px 1px 4px black',
+														}}
+													>
+														+ {item}
+													</span>
+												);
+											})}
+										</h1>
+									) : null}
+
+									{modifiedFiles[index].length ? (
+										<h1
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+											}}
+										>
+											{modifiedFiles[index].map((item: string) => {
+												return (
+													<span
+														style={{
+															color: 'yellow',
+															textShadow: '1px 1px 7px black',
+														}}
+													>
+														&#xb1; {item}
+													</span>
+												);
+											})}
+										</h1>
+									) : null}
+
+									{deletedFiles[index].length ? (
+										<h1
+											style={{
+												display: 'flex',
+												flexDirection: 'column',
+											}}
+										>
+											{deletedFiles[index].map((item: string) => {
+												return (
+													<span
+														style={{
+															color: 'tomato',
+															textShadow: '1px 1px 4px black',
+														}}
+													>
+														- {item}
+													</span>
+												);
+											})}
+										</h1>
+									) : null}
+								</div>
 							</AbsoluteFill>
 						</Sequence>
 					);

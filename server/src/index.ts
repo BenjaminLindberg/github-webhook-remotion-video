@@ -21,10 +21,19 @@ app.post('/', (req: Request, res: Response) => {
 			return commit.message;
 		}),
 		commitIds: req.body.commits.map((commit: any) => {
-			return commit.id;
+			return commit.id.substring(0, 7);
 		}),
 		authorUsernames: req.body.commits.map((commit: any) => {
 			return commit.author.username;
+		}),
+		addedFiles: req.body.commits.map((commit: any) => {
+			return [...commit.added];
+		}),
+		deletedFiles: req.body.commits.map((commit: any) => {
+			return [...commit.removed];
+		}),
+		modifiedFiles: req.body.commits.map((commit: any) => {
+			return [...commit.modified];
 		}),
 	}).then((res) => {
 		DiscordWebhook({
